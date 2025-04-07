@@ -12,6 +12,8 @@ const day = new Date();
 const WEEK_NAMES = '일월화수목금토'
 console.log("오늘은 " + WEEK_NAMES[day.getDay()]+"요일입니다.")
 
+
+
 console.log("========================");
 console.log("연습문제 3");
 function addPoints(a, b) {
@@ -25,9 +27,28 @@ function addPoints(a, b) {
     console.log((a+b).toFixed(fixed));
 
 }
-addPoints(0.21354, 0.1) // 0.31354
-addPoints(0.14, 0.28) // 0.42
-addPoints(0.34, 0.226) // 0.566
-addPoints(10.34, 200.226) // 210.566
-addPoints(0.143, -10.28) // -10.137
-addPoints(0.143, -10) // -9.857
+
+function addPoints2(a, b){
+    const p = 10 ** 15;
+    const ai = a * p;
+    const bi = b * p;
+
+    const ret = (ai + bi) / p;
+    console.log(ret)
+}
+
+function addPoints3(...arg) {
+    const p = 10 ** 15;
+    let ret = 0;
+    for(const n of arg){
+        ret += Math.trunc(n*p);
+    }
+    ret /= p;
+    console.log(ret);
+}
+addPoints2(0.21354, 0.1) // 0.31354
+addPoints3(0.14, 0.28) // 0.42
+addPoints2(0.34, 0.226) // 0.566
+addPoints3(10.34, 200.226) // 210.566
+addPoints2(0.143, -10.28) // -10.137
+addPoints3(0.143, -10) // -9.857
