@@ -46,9 +46,32 @@ function addPoints3(...arg) {
     ret /= p;
     console.log(ret);
 }
-addPoints2(0.21354, 0.1) // 0.31354
-addPoints3(0.14, 0.28) // 0.42
-addPoints2(0.34, 0.226) // 0.566
-addPoints3(10.34, 200.226) // 210.566
-addPoints2(0.143, -10.28) // -10.137
-addPoints3(0.143, -10) // -9.857
+
+function plength(n){
+    return n.toString().length - Math.trunc(n).toString().length - 1;
+}
+function cal(op, ...arg){
+    let len = plength(arg[0]);
+    let sum = arg[0];
+
+    const operator = (op == '+') ? +1 : -1;
+    for(let i = 1; i<arg.length; i++){
+        // console.log("now : " + len);
+        len = Math.max(len, plength(arg[i]));
+        sum += (operator)*arg[i];
+    }
+    sum = sum.toFixed(len);
+    console.log(sum);
+}
+cal('+', 0.21354, 0.1);
+cal('-', 0.21354, 0.1);
+cal('+', 0.14, 0.28);
+cal('-', 0.14, 0.28);
+cal('-', 10.34, 200.226);
+
+// addPoints2(0.21354, 0.1) // 0.31354
+// addPoints3(0.14, 0.28) // 0.42
+// addPoints2(0.34, 0.226) // 0.566
+// addPoints3(10.34, 200.226) // 210.566
+// addPoints2(0.143, -10.28) // -10.137
+// addPoints3(0.143, -10) // -9.857
