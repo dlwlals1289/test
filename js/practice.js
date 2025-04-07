@@ -75,3 +75,35 @@ cal('-', 10.34, 200.226);
 // addPoints3(10.34, 200.226) // 210.566
 // addPoints2(0.143, -10.28) // -10.137
 // addPoints3(0.143, -10) // -9.857
+
+console.log("========================");
+console.log("연습문제 4");
+
+function avg(arr){
+    const p = 100;
+    let tFsum = 0;
+    let sum = 0;
+    let len = 0;
+    let res = 0;
+
+    for(const n of arr){
+        if(!isNaN(n) && n != null){ // string, undefined 제거 && null 제거
+            if(!isNaN(+n)){
+                sum += n*p;
+                tFsum += (+n);
+                len += 1;
+            }
+        }
+    }
+
+    // 1) toFixed() 사용
+    res = tFsum / len
+    console.log("🚀 toFixed:", res.toFixed(2))
+    
+    // 2) toFixed() 사용하지 않고 
+    res = Math.trunc(sum / len);
+    res /= 100.00;
+    console.log("🚀 toFixed 사용X:", res)
+}
+const prices = [10.34, 'xxx', 5.678, null, 20.9, 1.005, 0, 19, undefined, '0.5'];
+avg(prices);
