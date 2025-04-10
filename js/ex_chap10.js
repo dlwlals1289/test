@@ -131,8 +131,6 @@ function deepCopy(obj){
             newObj[k] = v;
         }
 
-        // 두번째 풀이
-
     }
     return newObj;
 }
