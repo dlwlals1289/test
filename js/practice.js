@@ -97,13 +97,19 @@ function avg(arr){
     }
 
     // 1) toFixed() 사용
+    console.log(sum);
     res = tFsum / len
     console.log("🚀 toFixed:", res.toFixed(2))
     
     // 2) toFixed() 사용하지 않고 
+    console.log(tFsum);
     res = Math.trunc(sum / len);
     res /= 100.00;
     console.log("🚀 toFixed 사용X:", res)
 }
-const prices = [10.34, 'xxx', 5.678, null, 20.9, 1.005, 0, 19, undefined, '0.5'];
+const prices = [10.34, 'xxx', 5.678, null, 20.9, 1.005, 0, 18, undefined, "0.5"];
+
 avg(prices);
+{
+    console.log("!23");
+}
