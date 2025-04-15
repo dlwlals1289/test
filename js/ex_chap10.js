@@ -138,3 +138,132 @@ function deepCopy(obj){
 const newKim2 = deepCopy(kim2); 
 newKim2.addr.city = 'Daegu';
 console.log(kim2.addr.city !== newKim2.addr.city); // true면 통과!
+
+
+// console.log("***** 12번 문제 *****")
+// console.log("--------------------")
+// globalThis.name = "Global";
+// this.name = "ModuleName";
+
+// const dog = {
+//     name: 'Maxx',
+//     showMyName() {
+        
+//         console.log(`My name is ${this.name}.`);
+//     },
+//     whatsYourName() {
+//         // 첫번째 방법
+//         setTimeout(this.showMyName.bind(this), 1000);
+
+//         // 두번째 방법
+//         setTimeout(() => {
+//             console.log(this);
+//             this.showMyName();
+//         }, 1000);
+//     }
+// };
+// // console.log(this);
+// dog.whatsYourName();
+
+
+// const week = (weekNo) => {
+//     const weeks = ['일', '월', '화', '수', '목', '금', '토'];
+//     return weeks[weekNo];
+// }
+
+// const getWeekName = week;
+
+// const day = new Date().getDay();
+// console.log(`오늘은 ${getWeekName(day)}입니다!`);
+
+
+console.log("***** 13번 문제 *****")
+console.log("--------------------")
+const once = (cb) => {
+    let done;
+    return (...args) => {
+        if(done) {
+            return;
+        }
+        else {
+            done = true;
+            return cb(...args);
+        }
+    };
+}
+// const onceAgain = 
+
+// const fn2 = onceAgain((x, y) => `금일 운행금지 차량은 끝번호 ${x}, ${y}입니다!`, 100);
+const fn = once((x, y) => `금일 운행금지 차량은 끝번호 ${x}, ${y}입니다!`);
+
+console.log(fn(1, 6)); // 금일 운행금지 차량은 끝번호 1, 6입니다!
+console.log(fn(2, 7)); // undefined
+console.log(fn(3, 8)); // undefined
+// console.log(fn2()(1, 6));
+// return ;
+
+console.log("***** 14번 문제 *****")
+console.log("--------------------")
+const before = () => console.log('before....');
+const after = (result) => console.log('after...', result);
+
+const someFn = (name, greeting) => `${greeting}, ${name}`;
+const someFn2 = (id, nickname, email, level) => `${id}/${nickname}/${email}/${level}`;
+
+const template = (f) => {
+    let timer;
+    return (...arg) => {
+        before();
+        
+        // 내꺼
+        // timer = setTimeout(() => {
+        //     after(f(...arg));
+        //     timer = null;
+        // }, 100);
+        // return f(...arg);
+
+        // 정답
+        const result = f(...arg);
+        setImmediate(after, result);
+        return result;
+    }
+
+}
+
+const temp = template(someFn);  // before → someFn → after 실행
+const temp2 = template(someFn2);  // before → someFn2 → after 실행
+
+console.log('temp1>>', temp('sico', 'hello'));
+console.log('temp2>>', temp2(1, 'sico', 'sico@gmail.com', 5));
+
+console.log("***** 15번 문제 *****")
+console.log("--------------------")
+
+// 내꺼
+// const getNextWeek = (widx) => {
+//     const weeks = ['일', '월', '화', '수', '목', '금', '토'];
+//     if (widx >= weeks.length) widx = 0;
+
+//     return `${weeks[widx]}요일`;
+// };
+
+// let cnt = 0;
+// const intl = setInterval(() => {
+// //   widx += 2; // side-effect!
+//   console.log('call', cnt, getNextWeek(cnt));
+//   if ((cnt += 1) === 8) clearInterval(intl);
+// }, 1000);
+
+//정답
+const getNextWeek = (() => {
+    const weeks = ['일', '월', '화', '수', '목', '금', '토'];
+    let widx = -1;
+    return () => `${weeks[++widx]}요일`;
+})();
+
+let cnt = 0;
+const intl = setInterval(() => {
+//   widx += 2; // side-effect!
+  console.log('call', cnt, getNextWeek());
+  if ((cnt += 1) === 7) clearInterval(intl);
+}, 1000);
