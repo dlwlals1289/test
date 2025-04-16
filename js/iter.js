@@ -23,9 +23,9 @@ const gen = myGenerator();
 // console.log(gen.next()); // { value: 'c', done: false }
 // console.log(gen.next()); // { value: undefined, done: true }
 
-for (const val of myGenerator()) {
-console.log(val); // 'a', 'b', 'c'
-}
+// for (const val of myGenerator()) {
+// console.log(val); // 'a', 'b', 'c'
+// }
 
 class Dog {
     name;
@@ -53,9 +53,11 @@ function* gener() {
     const y = yield (x + 10);
     console.log('x y =', x, y);
     return x + y;
-  }
-  const it3 = gener();
-  console.log(it3.next()); // { value: 1, done: false }
-  console.log(it3.next(3)); // { value: 13, done: false }
-  
-  console.log(it3.next(5)); 
+}
+const it3 = gener();
+console.log(it3.next()); // { value: 1, done: false }
+console.log(it3.next(3)); // { value: 13, done: false }
+
+console.log(it3.next(5)); 
+
+

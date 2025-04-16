@@ -1,13 +1,30 @@
-function* add () {
-    const a = yield "첫번째 정수는?";
-    const b = yield "두번째 정수는?";
-    return a+b;
-}
+// const readline = require('readline');
+// const {stdin : input, stdout : output} = require('process');
+// const r1 = readline.createInterface({input, output});
+// console.log('\n'.repeat(2));
 
-const itAdd = add();
-console.log(itAdd.next().value);
-console.log(itAdd.next(1).value);
-console.log(itAdd.next(2).value);
+// const gener1 = add();
+// const {value} = gener1.next();
+
+// r1.on('line', answer => {
+//     console.log('line.answer => ', answer);
+//     const {value, done} = gener1.next(Number(answer));
+//     if(done) {
+//         console.log('Total is ', value);
+//         r1.close();
+//     }
+//     else{
+//         console.log(value);
+//     }
+// }).on('close', ()=>{
+//     process.exit();
+// });
+
+// function* add(){
+//     const a = yield 'first number?';
+//     const b = yield 'second number?';
+//     return a + b;
+// }
 
 const LINE2 = [
     '신도림',
@@ -61,49 +78,77 @@ const LINE2 = [
 ]
   
 class Subway {
-    start;
-    end;
+    #start;
+    #end;
+    #currIdx=0;
+    #didEnd = false;
 
     constructor(start, end){
-        this.start = start;
-        this.end = end;
+        this.#start = start;
+        this.#end = end;
+        this.#currIdx = LINE2.indexOf(start);
     }
-    [Symbol.iterator] (){
-        let idx = 0;
-        const startIdx = LINE2.indexOf(this.start);
-        const endIdx = LINE2.indexOf(this.end);
+    // 내 코드 - iterator
+    // [Symbol.iterator] (){
+    //     let idx = 0;
+    //     const startIdx = LINE2.indexOf(this.#start);
+    //     const endIdx = LINE2.indexOf(this.#end);
 
-        const route = (startIdx <= endIdx) 
-        ? LINE2.slice(startIdx, endIdx+1) 
-        : LINE2.slice(startIdx).concat(LINE2.slice(0,endIdx+1));
+    //     const route = (startIdx <= endIdx) 
+    //     ? LINE2.slice(startIdx, endIdx+1) 
+    //     : LINE2.slice(startIdx).concat(LINE2.slice(0,endIdx+1));
                 
-        return {
-            next() {
-                return { value: route[idx++],
-                        done: idx > route.length };
+    //     return {
+    //         next() {
+    //             return { value: route[idx++],
+    //                     done: idx > route.length };
+    //         }
+    //     };
+    // }
+    nextStation(){
+        if(this.#currIdx == LINE2.length){
+            this.#currIdx = 0;
+        }
+        this.#didEnd = (this.#currIdx === (LINE2.indexOf(this.#end)));
+        return LINE2[this.#currIdx++];
+    }
+    *[Symbol.iterator]() {
+        while(true){
+            if(this.#didEnd){
+                this.#currIdx = LINE2.indexOf(this.#start);
+                break;
             }
-        };
+
+            yield this.nextStation();
+        }
+    }
+    iterator(){
+        return this[Symbol.iterator]();
     }
 }
 
+
 const routes = new Subway('문래', '신림');
-const it1 = routes[Symbol.iterator]();
+// const it1 = routes[Symbol.iterator]();
 console.log([...routes]); // [ '문래', '대림', '구로디지털단지', '신대방', '신림' ]
-console.log(it1.next()); // { value: '문래', done: false }
-console.log(it1.next()); // { value: '대림', done: false }
-console.log(it1.next()); // { value: '구로디지털단지', done: false }
-console.log(it1.next()); // { value: '신대방', done: false }
-console.log(it1.next()); // { value: '신림', done: false }
-console.log(it1.next()); // { value: undefined, done: true }
-console.log(it1.next()); // { value: undefined, done: true }
+for(const s of routes.iterator()){
+    console.log("🚀 ~ s:", s)
+}
+// console.log(it1.next()); // { value: '문래', done: false }
+// console.log(it1.next()); // { value: '대림', done: false }
+// console.log(it1.next()); // { value: '구로디지털단지', done: false }
+// console.log(it1.next()); // { value: '신대방', done: false }
+// console.log(it1.next()); // { value: '신림', done: false }
+// console.log(it1.next()); // { value: undefined, done: true }
+// console.log(it1.next()); // { value: undefined, done: true }
 
 console.log("----------------------");
 const routes2 = new Subway('구로디지털단지', '성수');  // 32개 정거장
-console.log([...routes2]); // ['구로디지털단지', '신대방', ..., '성수']
+console.log([...routes2].length); // ['구로디지털단지', '신대방', ..., '성수']
 const it2 = routes2[Symbol.iterator]();
 while (true) {
   const x = it2.next();
-  console.log(x);
+//   console.log(x);
   if (x.done) break;
 }
 
