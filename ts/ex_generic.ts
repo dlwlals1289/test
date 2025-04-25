@@ -1,3 +1,6 @@
+import { jadeX } from "jade";
+import { Factory } from "./generic";
+
 interface IUser {
     id: number;
     age: number;
@@ -106,3 +109,8 @@ console.log(deleteArray(users, 2)); // [Hong, Kim]
 console.log(deleteArray(users, 1, 2)); // [Hong, Lee]
 console.log(deleteArray(users, 'id', 2)); // [Hong, Lee]
 console.log(deleteArray(users, 'name', 'Lee')); // [Hong, Kim]
+
+let x : Hana7 = { id: 1, name: 'Hong' };
+let ft : Factory<string>;
+
+console.log(jadeX);
