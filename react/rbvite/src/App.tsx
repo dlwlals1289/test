@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import './App.css';
 import Hello from './components/Hello';
 import My from './components/My';
-import './App.css';
 
 export type LoginUser = {
   id: number;
   name: string;
 };
-type Cart = {
+
+export type LoginFn = (id: number, name: string) => void;
+
+export type Cart = {
   id: number;
   name: string;
   price: number;
@@ -18,7 +21,8 @@ export type Session = {
   cart: Cart[];
 };
 
-const SampleSession = {
+const SampleSession: Session = {
+  // loginUser: null,
   loginUser: { id: 1, name: 'Hong' },
   cart: [
     { id: 100, name: '라면', price: 3000 },
@@ -28,26 +32,51 @@ const SampleSession = {
 };
 
 function App() {
-  const [count, setCount] = useState(0);
   const [session, setSession] = useState<Session>(SampleSession);
+  const [count, setCount] = useState(0);
 
-  const plusCount = () => setCount((count) => count + 1);
-  // const login = (id: number, name: string) => {
-  //   setSession({ loginUser: { id: id, name: name }, cart: [] });
-  // };
-  const login = () => {};
+  const plusCount = () => setCount((c) => c + 1);
+  const login = (id: number, name: string) => {
+    setSession({ ...session, loginUser: { id, name } });
+  };
+
   const logout = () => {
-    // session.loginUser = null; -> NonPureFunction!!
-    setSession({ loginUser: null, cart: [] });
-    // setSession({ ...session, loginUser: null});
+    // session.loginUser = null; // non-pure function!
+    setSession({ ...session, loginUser: null });
+  };
+
+  const removeItem = (id: number) => {
+    setSession({
+      ...session,
+      cart: session.cart.filter((item) => item.id !== id),
+    });
+  };
+
+  const addItem = (name: string, price: number) => {
+    const id = Math.max(...session.cart.map((item) => item.id), 0) + 1;
+    setSession({ ...session, cart: [...session.cart, { id, name, price }] });
+  };
+
+  const editItem = (workingItem: Cart) => {
+    setSession({
+      ...session,
+      cart: session.cart.map((item) => (item.id === workingItem.id ? workingItem : item)),
+    });
   };
 
   return (
     <>
-      <h1 className="mb-10">count : {count}</h1>
-      <My session={session} login={login} logout={logout} />
-      <Hello name="홍길동" age={30} plusCount={plusCount}>
-        <h3>반갑습니다~</h3>
+      <h2>count: {count}</h2>
+      <My
+        session={session}
+        login={login}
+        logout={logout}
+        removeItem={removeItem}
+        addItem={addItem}
+        editItem={editItem}
+      />
+      <Hello name={'홍길동'} age={33} plusCount={plusCount}>
+        반갑습니다!
       </Hello>
     </>
   );
