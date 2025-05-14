@@ -13,16 +13,12 @@ type Props = {
 export default function My({ logoutButtonRef, loginHandlerRef }: Props) {
   const [isAdding, setAdding] = useState(false);
   const toggleAdding = () => setAdding(!isAdding);
-  const { session, login, removeCartItem, addCartItem, editCartItem } = useSession();
+  const { session, removeCartItem, addCartItem, editCartItem } = useSession();
   const { loginUser, cart } = session;
 
   return (
     <>
-      {loginUser ? (
-        <Profile logoutButtonRef={logoutButtonRef} />
-      ) : (
-        <Login login={login} loginHandlerRef={loginHandlerRef} />
-      )}
+      {loginUser ? <Profile logoutButtonRef={logoutButtonRef} /> : <Login loginHandlerRef={loginHandlerRef} />}
 
       <div>
         <ul>

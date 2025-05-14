@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren } from 'react';
+import { useRef, useState, type PropsWithChildren } from 'react';
 import { SessionContext, type Cart, type Session } from './SessionContext';
 
 const SampleSession: Session = {
@@ -12,43 +12,23 @@ const SampleSession: Session = {
 };
 export const SessionProvider = ({ children }: PropsWithChildren) => {
   const [session, setSession] = useState<Session>(SampleSession);
-  //   const idRef = useRef<HTMLInputElement>(null);
-  //   const nameRef = useRef<HTMLInputElement>(null);
+  const idRef = useRef<React.RefObject<HTMLInputElement> | null>(null);
+  const nameRef = useRef<React.RefObject<HTMLInputElement> | null>(null);
 
-  //   const validate = () => {
-  //     const id = Number(idRef.current?.value);
-  //     const name = nameRef.current?.value;
-
-  //     // console.log(id, name);
-  //     if (!id || isNaN(id)) {
-  //       alert('Input the user id!');
-  //       idRef.current?.focus();
-  //       return false;
-  //     } else if (!name) {
-  //       alert('Input the user name!');
-  //       nameRef.current?.focus();
-  //       return false;
-  //     }
-
-  //     return true;
-  //   };
-  //   const makeLogin = (id: number, name: string) => {
-  //     if (validate()) setSession({ ...session, loginUser: { id, name } });
-  //     else idRef.current?.focus();
-  //   };
-  //   const login = (evt: FormEvent<HTMLFormElement>) => {
-  //     evt.preventDefault();
-  //     const id = Number(idRef.current?.value);
-  //     const name = nameRef.current?.value ?? '';
-  //     console.log(id, name);
-  //     makeLogin(id, name);
-  //   };
   const login = (id: number, name: string) => {
+    if (!id || isNaN(id)) {
+      alert('Input the user id!');
+      idRef.current?.current?.focus();
+      return;
+    } else if (!name) {
+      alert('Input the user name!');
+      nameRef.current?.current?.focus();
+      return;
+    }
     setSession({ ...session, loginUser: { id, name } });
   };
 
   const logout = () => {
-    console.log('adfa');
     setSession({ ...session, loginUser: null });
   };
 
@@ -71,6 +51,31 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
     });
   };
 
+  //   const loginHandler = {
+  //     setIdRef(ref: React.RefObject<HTMLInputElement>) {
+  //       idRef.current = ref;
+  //     },
+  //     setNameRef(ref: React.RefObject<HTMLInputElement>) {
+  //       nameRef.current = ref;
+  //     },
+  //     validate() {
+  //       const id = Number(idRef.current?.current?.value);
+  //       const name = nameRef.current?.current?.value;
+
+  //       if (!id || isNaN(id)) {
+  //         alert('Input the user id!');
+  //         idRef.current?.current?.focus();
+  //         return false;
+  //       } else if (!name) {
+  //         alert('Input the user name!');
+  //         nameRef.current?.current?.focus();
+  //         return false;
+  //       }
+
+  //       return true;
+  //     },
+  //   };
+
   return (
     <>
       <SessionContext.Provider
@@ -81,6 +86,7 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
           removeCartItem,
           addCartItem,
           editCartItem,
+          //   loginHandler,
         }}
       >
         {children}
@@ -88,3 +94,35 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
     </>
   );
 };
+
+//   const idRef = useRef<HTMLInputElement>(null);
+//   const nameRef = useRef<HTMLInputElement>(null);
+
+//   const validate = () => {
+//     const id = Number(idRef.current?.value);
+//     const name = nameRef.current?.value;
+
+//     // console.log(id, name);
+//     if (!id || isNaN(id)) {
+//       alert('Input the user id!');
+//       idRef.current?.focus();
+//       return false;
+//     } else if (!name) {
+//       alert('Input the user name!');
+//       nameRef.current?.focus();
+//       return false;
+//     }
+
+//     return true;
+//   };
+//   const makeLogin = (id: number, name: string) => {
+//     if (validate()) setSession({ ...session, loginUser: { id, name } });
+//     else idRef.current?.focus();
+//   };
+//   const login = (evt: FormEvent<HTMLFormElement>) => {
+//     evt.preventDefault();
+//     const id = Number(idRef.current?.value);
+//     const name = nameRef.current?.value ?? '';
+//     console.log(id, name);
+//     makeLogin(id, name);
+//   };

@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, type RefObject } from 'react';
 
 export type LoginUser = {
   id: number;
@@ -13,6 +13,12 @@ export type Session = {
   loginUser: LoginUser | null;
   cart: Cart[];
 };
+export type LoginHandler = {
+  setIdRef: (ref: React.RefObject<HTMLInputElement>) => void;
+  setNameRef: (ref: React.RefObject<HTMLInputElement>) => void;
+  // nameRef: RefObject<HTMLInputElement> | null;
+  validate: () => boolean;
+};
 
 export type SessionContextType = {
   session: Session;
@@ -22,6 +28,7 @@ export type SessionContextType = {
   removeCartItem: (id: number) => void;
   addCartItem: (name: string, price: number) => void;
   editCartItem: (item: Cart) => void;
+  // loginHandler: LoginHandler;
 };
 export const SessionContext = createContext<SessionContextType>({
   session: {
@@ -38,4 +45,9 @@ export const SessionContext = createContext<SessionContextType>({
   removeCartItem: () => {},
   addCartItem: () => {},
   editCartItem: () => {},
+  // loginHandler: {
+  //   setIdRef: () => {},
+  //   setNameRef: () => {},
+  //   validate: () => false,
+  // },
 });

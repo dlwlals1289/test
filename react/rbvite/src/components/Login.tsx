@@ -1,35 +1,21 @@
-import { useImperativeHandle, useRef, useState, type FormEvent, type RefObject } from 'react';
+import { useImperativeHandle, useRef, type FormEvent, type RefObject } from 'react';
+import { useSession } from '../contexts/session/useSession';
 // import type { LoginFn } from '../App';
 
 export type LoginHandler = {
-  str: string;
-  getName: () => string;
-  makeX: (n: number) => void;
-  focusId: () => void;
   validate: () => boolean;
 };
 
 type Props = {
-  login: (id: number, name: string) => void;
   loginHandlerRef: RefObject<LoginHandler | null>;
 };
 
-export default function Login({ login, loginHandlerRef }: Props) {
-  const [x, setX] = useState(0);
+export default function Login({ loginHandlerRef }: Props) {
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const { login } = useSession();
 
   const loginHandler: LoginHandler = {
-    str: 'STRING',
-    makeX(n: number) {
-      setX(n);
-    },
-    focusId() {
-      idRef.current?.focus();
-    },
-    getName() {
-      return nameRef.current?.value || '';
-    },
     validate() {
       const id = Number(idRef.current?.value);
       const name = nameRef.current?.value;
@@ -54,14 +40,16 @@ export default function Login({ login, loginHandlerRef }: Props) {
     evt.preventDefault();
     const id = Number(idRef.current?.value);
     const name = nameRef.current?.value ?? '';
+
     console.log(id, name);
+
     login(id, name);
   };
 
   return (
     <form onSubmit={makeLogin}>
       <div>
-        LoginID({x}):
+        LoginID:
         <input ref={idRef} type="number" />
       </div>
       <div>
