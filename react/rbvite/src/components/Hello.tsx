@@ -1,28 +1,33 @@
-import { useImperativeHandle, type ForwardedRef, type PropsWithChildren, type RefObject } from 'react';
+import { use, useImperativeHandle, type ForwardedRef, type PropsWithChildren, type RefObject } from 'react';
+import { CounterContext } from '../contexts/counter/CounterContext';
+
+export type HelloHandler = {
+  xx: string;
+  sayHello: () => void;
+};
 
 type Props = {
   name: string;
   age: number;
-  plusCount: () => void;
   helloButtonRef: RefObject<HTMLButtonElement | null>;
-  ref: ForwardedRef<HelloHandler>;
-  // children: ReactNode; // PropsWithChildren
-};
-
-export type HelloHandler = {
-  hello: string;
-  sayHello: () => void;
+  refx: ForwardedRef<HelloHandler>;
 };
 
 // {name: '홍길동'}
-export default function Hello({ name, age, plusCount, children, helloButtonRef, ref }: PropsWithChildren<Props>) {
+export default function Hello({ name, age, helloButtonRef, children, refx }: PropsWithChildren<Props>) {
+  // const { plusCount } = useCounter();
+  const { plusCount } = use(CounterContext);
+
   const helloHandler = {
-    hello: 'hello',
+    xx: 'XXXX',
     sayHello() {
-      alert(`Hello, Mr${name}`);
+      alert(`Hello, Mr.${name}!`);
     },
   };
-  useImperativeHandle(ref, () => helloHandler);
+
+  // refx.current = helloHandler;
+  useImperativeHandle(refx, () => helloHandler);
+
   return (
     <div className="border">
       <h3>

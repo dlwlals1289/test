@@ -1,5 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react';
-import type { Cart } from '../App';
+import type { Cart } from '../contexts/session/SessionContext';
 
 type Props = {
   item: Cart;
