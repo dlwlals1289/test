@@ -1,5 +1,5 @@
-import { use, useImperativeHandle, type ForwardedRef, type PropsWithChildren, type RefObject } from 'react';
-import { CounterContext } from '../contexts/counter/CounterContext';
+import { useImperativeHandle, type ForwardedRef, type PropsWithChildren, type RefObject } from 'react';
+import { useCounter } from '../contexts/counter/useCounter';
 
 export type HelloHandler = {
   xx: string;
@@ -15,8 +15,7 @@ type Props = {
 
 // {name: '홍길동'}
 export default function Hello({ name, age, helloButtonRef, children, refx }: PropsWithChildren<Props>) {
-  // const { plusCount } = useCounter();
-  const { plusCount } = use(CounterContext);
+  const { plusCount } = useCounter();
 
   const helloHandler = {
     xx: 'XXXX',
@@ -25,7 +24,6 @@ export default function Hello({ name, age, helloButtonRef, children, refx }: Pro
     },
   };
 
-  // refx.current = helloHandler;
   useImperativeHandle(refx, () => helloHandler);
 
   return (

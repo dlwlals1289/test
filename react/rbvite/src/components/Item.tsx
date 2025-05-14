@@ -1,18 +1,17 @@
 import { useRef, useState, type FormEvent } from 'react';
 import type { Cart } from '../contexts/session/SessionContext';
+import { useSession } from '../contexts/session/useSession';
 
 type Props = {
   item: Cart;
-  removeItem: (id: number) => void;
-  addItem: (name: string, price: number) => void;
-  editItem: (item: Cart) => void;
   toggleAdding?: () => void;
 };
-export default function Item({ item, removeItem, addItem, editItem, toggleAdding }: Props) {
+export default function Item({ item, toggleAdding }: Props) {
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(!item.id);
   const [hasDirty, setDirty] = useState(false);
+  const { addCartItem, editCartItem, removeCartItem } = useSession();
 
   const submitItem = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -30,9 +29,9 @@ export default function Item({ item, removeItem, addItem, editItem, toggleAdding
 
     const { id } = item;
     if (id) {
-      editItem({ id, name, price: +price });
+      editCartItem({ id, name, price: +price });
     } else {
-      addItem(name, +price);
+      addCartItem(name, +price);
       if (toggleAdding) {
         toggleAdding();
       }
@@ -59,7 +58,7 @@ export default function Item({ item, removeItem, addItem, editItem, toggleAdding
           <a href="#" onClick={() => setIsEditing(!isEditing)}>
             {item.id}. {item.name} ({item.price.toLocaleString()})
           </a>
-          <button onClick={() => removeItem(item.id)} className="p-sm">
+          <button onClick={() => removeCartItem(item.id)} className="p-sm">
             x
           </button>
         </div>

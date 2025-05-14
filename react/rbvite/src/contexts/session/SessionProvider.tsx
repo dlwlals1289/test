@@ -10,22 +10,15 @@ const SampleSession: Session = {
     { id: 200, name: '파', price: 5000 },
   ],
 };
+type LoginHandler = {
+  validate: () => boolean;
+};
 export const SessionProvider = ({ children }: PropsWithChildren) => {
   const [session, setSession] = useState<Session>(SampleSession);
-  const idRef = useRef<React.RefObject<HTMLInputElement> | null>(null);
-  const nameRef = useRef<React.RefObject<HTMLInputElement> | null>(null);
 
   const login = (id: number, name: string) => {
-    if (!id || isNaN(id)) {
-      alert('Input the user id!');
-      idRef.current?.current?.focus();
-      return;
-    } else if (!name) {
-      alert('Input the user name!');
-      nameRef.current?.current?.focus();
-      return;
-    }
-    setSession({ ...session, loginUser: { id, name } });
+    if (!loginHandlerRef.current) return;
+    if (loginHandlerRef.current.validate()) setSession({ ...session, loginUser: { id, name } });
   };
 
   const logout = () => {
@@ -51,78 +44,21 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
     });
   };
 
-  //   const loginHandler = {
-  //     setIdRef(ref: React.RefObject<HTMLInputElement>) {
-  //       idRef.current = ref;
-  //     },
-  //     setNameRef(ref: React.RefObject<HTMLInputElement>) {
-  //       nameRef.current = ref;
-  //     },
-  //     validate() {
-  //       const id = Number(idRef.current?.current?.value);
-  //       const name = nameRef.current?.current?.value;
+  const loginHandlerRef = useRef<LoginHandler>(null);
 
-  //       if (!id || isNaN(id)) {
-  //         alert('Input the user id!');
-  //         idRef.current?.current?.focus();
-  //         return false;
-  //       } else if (!name) {
-  //         alert('Input the user name!');
-  //         nameRef.current?.current?.focus();
-  //         return false;
-  //       }
-
-  //       return true;
-  //     },
-  //   };
+  const value = {
+    session,
+    login,
+    logout,
+    removeCartItem,
+    addCartItem,
+    editCartItem,
+    loginHandlerRef,
+  };
 
   return (
     <>
-      <SessionContext.Provider
-        value={{
-          session,
-          login,
-          logout,
-          removeCartItem,
-          addCartItem,
-          editCartItem,
-          //   loginHandler,
-        }}
-      >
-        {children}
-      </SessionContext.Provider>
+      <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
     </>
   );
 };
-
-//   const idRef = useRef<HTMLInputElement>(null);
-//   const nameRef = useRef<HTMLInputElement>(null);
-
-//   const validate = () => {
-//     const id = Number(idRef.current?.value);
-//     const name = nameRef.current?.value;
-
-//     // console.log(id, name);
-//     if (!id || isNaN(id)) {
-//       alert('Input the user id!');
-//       idRef.current?.focus();
-//       return false;
-//     } else if (!name) {
-//       alert('Input the user name!');
-//       nameRef.current?.focus();
-//       return false;
-//     }
-
-//     return true;
-//   };
-//   const makeLogin = (id: number, name: string) => {
-//     if (validate()) setSession({ ...session, loginUser: { id, name } });
-//     else idRef.current?.focus();
-//   };
-//   const login = (evt: FormEvent<HTMLFormElement>) => {
-//     evt.preventDefault();
-//     const id = Number(idRef.current?.value);
-//     const name = nameRef.current?.value ?? '';
-//     console.log(id, name);
-//     makeLogin(id, name);
-//   };
