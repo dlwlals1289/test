@@ -16,7 +16,7 @@ function App() {
       <SessionProvider>
         <My />
       </SessionProvider>
-      <Hello name={'홍길동'} age={33} helloButtonRef={helloButtonRef} refx={helloHandlerRef}>
+      <Hello id={count + 1} helloButtonRef={helloButtonRef} refx={helloHandlerRef}>
         반갑습니다!
       </Hello>
       <button onClick={() => helloHandlerRef.current?.sayHello()}>say Hello</button>

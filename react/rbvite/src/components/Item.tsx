@@ -41,6 +41,7 @@ export default function Item({ item, toggleAdding }: Props) {
   };
 
   const resetItem = () => {
+    console.log('reset');
     setIsEditing(false);
     setDirty(false);
     if (toggleAdding) {
@@ -79,9 +80,7 @@ export default function Item({ item, toggleAdding }: Props) {
             className="w-sm"
             onChange={() => checkDirty()}
           />
-          <button type="reset" disabled={true}>
-            취소
-          </button>
+          <button type="reset">취소</button>
           <button type="submit" disabled={!hasDirty}>
             ✔️{item.id ? '수정' : '추가'}
           </button>

@@ -1,11 +1,16 @@
-import { useImperativeHandle, useRef, type FormEvent } from 'react';
+import { useEffect, useImperativeHandle, useRef, useState, type FormEvent } from 'react';
 import { useSession } from '../contexts/session/useSession';
 import type { LoginHandler } from '../contexts/session/SessionContext';
+import { useCounter } from '../contexts/counter/useCounter';
+import { useInterval, useTimeout } from '../hooks/useTimer';
+// import { useInterval, useTimeout } from '../hooks/useTimer';
 
 export default function Login() {
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const { login, loginHandlerRef } = useSession();
+  const { plusCount, minusCount } = useCounter();
+  const [x, setX] = useState(0);
 
   const makeLogin = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -35,10 +40,19 @@ export default function Login() {
 
   useImperativeHandle(loginHandlerRef, () => loginHandler);
 
+  useEffect(() => {
+    plusCount();
+    return minusCount;
+  }, []);
+
+  const { reset, clear } = useInterval(() => setX((x) => x + 1), 1000);
+  useTimeout(reset, 2000);
+  useTimeout(clear, 5000);
+
   return (
     <form onSubmit={makeLogin}>
       <div>
-        LoginID:
+        LoginID ({x}):
         <input ref={idRef} type="number" />
       </div>
       <div>
@@ -46,6 +60,9 @@ export default function Login() {
         <input type="text" ref={nameRef} />
       </div>
       <button type="reset">Cancel</button>
+      <button onClick={() => setX((x) => x + 1)} type="reset">
+        plus count
+      </button>
       <button type="submit">Login</button>
     </form>
   );
