@@ -20,7 +20,7 @@ type User = {
 
 // {name: '홍길동'}
 export default function Hello({ id, helloButtonRef, children, refx }: PropsWithChildren<Props>) {
-  const { plusCount } = useCounter();
+  const { plusCount, minusCount } = useCounter();
   const [isshow, toggle] = useToggle();
 
   const helloHandler = {
@@ -44,8 +44,11 @@ export default function Hello({ id, helloButtonRef, children, refx }: PropsWithC
         <div>{!!error && JSON.stringify(error)}</div>
       </h3>
       <div>{children}</div>
-      <button ref={helloButtonRef} onClick={plusCount}>
+      <button ref={helloButtonRef} onClick={() => plusCount()}>
         count + 1
+      </button>
+      <button ref={helloButtonRef} onClick={() => minusCount()}>
+        count - 1
       </button>
       <button onClick={toggle}>Reload</button>
     </div>

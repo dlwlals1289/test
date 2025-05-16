@@ -5,14 +5,15 @@ import Item from './Item';
 // import { useState } from 'react';
 import { useSession } from '../contexts/session/useSession';
 import { useToggle } from '../hooks/useToggle';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useReducer, useState } from 'react';
 // import { useEffect, useState } from 'react';
 
 export default function My() {
   // const [isshow, setAdding] = useState(false);
   // const toggleAdding = () => setAdding(!isshow);
   const [isshow, toggle] = useToggle();
-  const [total, setTotal] = useState(0);
+  // const [isshow, toggle] = useReducer((pre) => !pre, false);
+  // const [total, setTotal] = useState(0);
   const {
     session: { loginUser, cart },
   } = useSession();
@@ -26,18 +27,22 @@ export default function My() {
   //   const sum = array.reduce((acc, a) => acc + a, 0);
   //   console.log('array >> ', sum);
   // }, [...array]);
-  useEffect(() => {
-    const sum = cart.reduce((acc, a) => acc + a.price, 0);
-    setTotal(sum);
-    console.log(sum);
-  }, [cart]);
+  // useEffect(() => {
+  //   const sum = cart.reduce((acc, a) => acc + a.price, 0);
+  //   setTotal(sum);
+  //   console.log(sum);
+  // }, [cart]);
 
   const totalPrice = useMemo(() => {
     const sum = cart.reduce((acc, a) => acc + a.price, 0);
     console.log('정답 >>>', sum);
     return sum;
   }, [cart]);
-  console.log('total >>', totalPrice);
+
+  const [expectPrice, addExpectPrice] = useReducer(
+    (preprice, newPrice) => totalPrice + newPrice + preprice * 0,
+    totalPrice
+  );
 
   // type Post = {
   //   id: number;
@@ -75,18 +80,19 @@ export default function My() {
   return (
     <>
       {loginUser ? <Profile /> : <Login />}
-      <h3>total : {total}</h3>
+      <h3>total : {totalPrice}</h3>
+      <h3>Expect : {expectPrice.toLocaleString()}</h3>
       <button onClick={() => rerender((prev) => prev + 1)}>rerender</button>
       <div>
         <ul>
           {cart.map((item) => (
             <li key={item.id}>
-              <Item item={item} toggleAdding={toggle} />
+              <Item item={item} addExpectPrice={addExpectPrice} toggleAdding={toggle} />
             </li>
           ))}
           {isshow ? (
             <li>
-              <Item item={{ id: 0, name: '', price: 3000 }} toggleAdding={toggle} />
+              <Item item={{ id: 0, name: '', price: 3000 }} addExpectPrice={addExpectPrice} toggleAdding={toggle} />
             </li>
           ) : (
             // <button onClick={() => setAdding(true)}>ADD</button>

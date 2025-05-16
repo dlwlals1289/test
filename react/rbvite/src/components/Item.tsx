@@ -1,17 +1,19 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import type { Cart } from '../contexts/session/SessionContext';
 import { useSession } from '../contexts/session/useSession';
 
 type Props = {
   item: Cart;
   toggleAdding?: () => void;
+  addExpectPrice: (price: number) => void;
 };
-export default function Item({ item, toggleAdding }: Props) {
+export default function Item({ item, addExpectPrice, toggleAdding }: Props) {
   const itemNameRef = useRef<HTMLInputElement>(null);
   const itemPriceRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(!item.id);
   const [hasDirty, setDirty] = useState(false);
   const { addCartItem, editCartItem, removeCartItem } = useSession();
+  const { id, price } = item;
 
   const submitItem = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -27,7 +29,6 @@ export default function Item({ item, toggleAdding }: Props) {
       return;
     }
 
-    const { id } = item;
     if (id) {
       editCartItem({ id, name, price: +price });
     } else {
@@ -47,10 +48,15 @@ export default function Item({ item, toggleAdding }: Props) {
     if (toggleAdding) {
       toggleAdding();
     }
+    if (!id && itemPriceRef.current) addExpectPrice(0);
   };
   const checkDirty = () => {
     setDirty(itemNameRef.current?.value !== item.name || Number(itemPriceRef.current?.value) !== item.price);
   };
+
+  useEffect(() => {
+    if (!id) addExpectPrice(price);
+  }, []);
 
   return (
     <div>
@@ -78,7 +84,12 @@ export default function Item({ item, toggleAdding }: Props) {
             ref={itemPriceRef}
             defaultValue={item.price}
             className="w-sm"
-            onChange={() => checkDirty()}
+            onChange={(evt) => {
+              checkDirty();
+              if (!id) {
+                addExpectPrice(id ? 0 : Number(evt.target.value));
+              }
+            }}
           />
           <button type="reset">취소</button>
           <button type="submit" disabled={!hasDirty}>
