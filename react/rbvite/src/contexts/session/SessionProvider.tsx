@@ -31,6 +31,12 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
       cart: session.cart.filter((item) => item.id !== id),
     });
   };
+  //   const removeCartItem = useCallback((id: number) => {
+  //     setSession({
+  //       ...session,
+  //       cart: session.cart.filter((item) => item.id !== id),
+  //     });
+  //   }, []);
 
   const addCartItem = (name: string, price: number) => {
     const id = Math.max(...session.cart.map((item) => item.id), 0) + 1;

@@ -5,15 +5,39 @@ import Item from './Item';
 // import { useState } from 'react';
 import { useSession } from '../contexts/session/useSession';
 import { useToggle } from '../hooks/useToggle';
+import { useEffect, useMemo, useState } from 'react';
 // import { useEffect, useState } from 'react';
 
 export default function My() {
   // const [isshow, setAdding] = useState(false);
   // const toggleAdding = () => setAdding(!isshow);
   const [isshow, toggle] = useToggle();
+  const [total, setTotal] = useState(0);
   const {
     session: { loginUser, cart },
   } = useSession();
+
+  // const array = useMemo(() => [1, 2, 3], []);
+  const [, rerender] = useState(0);
+  // const memocart = useMemo(() => cart, []);
+  // const array = [1, 2, 3];
+
+  // useEffect(() => {
+  //   const sum = array.reduce((acc, a) => acc + a, 0);
+  //   console.log('array >> ', sum);
+  // }, [...array]);
+  useEffect(() => {
+    const sum = cart.reduce((acc, a) => acc + a.price, 0);
+    setTotal(sum);
+    console.log(sum);
+  }, [cart]);
+
+  const totalPrice = useMemo(() => {
+    const sum = cart.reduce((acc, a) => acc + a.price, 0);
+    console.log('정답 >>>', sum);
+    return sum;
+  }, [cart]);
+  console.log('total >>', totalPrice);
 
   // type Post = {
   //   id: number;
@@ -51,7 +75,8 @@ export default function My() {
   return (
     <>
       {loginUser ? <Profile /> : <Login />}
-
+      <h3>total : {total}</h3>
+      <button onClick={() => rerender((prev) => prev + 1)}>rerender</button>
       <div>
         <ul>
           {cart.map((item) => (
