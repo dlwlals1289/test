@@ -2,10 +2,10 @@ import { useEffect, useImperativeHandle, useRef, useState, type FormEvent } from
 import { useSession } from '../contexts/session/useSession';
 import type { LoginHandler } from '../contexts/session/SessionContext';
 import { useCounter } from '../contexts/counter/useCounter';
-import { useInterval, useTimeout } from '../hooks/useTimer';
+// import { useInterval, useTimeout } from '../hooks/useTimer';
 // import { useInterval, useTimeout } from '../hooks/useTimer';
 
-export default function Login() {
+export default function Login({ title }: { title: string }) {
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const { login, loginHandlerRef } = useSession();
@@ -45,25 +45,31 @@ export default function Login() {
     return minusCount;
   }, []);
 
-  const { reset, clear } = useInterval(() => setX((x) => x + 1), 1000);
-  useTimeout(reset, 2000);
-  useTimeout(clear, 5000);
+  // const { reset, clear } = useInterval(() => setX((x) => x + 1), 1000);
+  // useTimeout(reset, 2000);
+  // useTimeout(clear, 5000);
+
+  const tit = `MyBlob::${title}`;
 
   return (
-    <form onSubmit={makeLogin}>
-      <div>
-        LoginID ({x}):
-        <input ref={idRef} type="number" />
-      </div>
-      <div>
-        LoginName:
-        <input type="text" ref={nameRef} />
-      </div>
-      <button type="reset">Cancel</button>
-      <button onClick={() => setX((x) => x + 1)} type="reset">
-        plus count
-      </button>
-      <button type="submit">Login</button>
-    </form>
+    <>
+      <title>{tit}</title>
+      <meta name="og:title" />
+      <form onSubmit={makeLogin}>
+        <div>
+          LoginID ({x}):
+          <input ref={idRef} type="number" />
+        </div>
+        <div>
+          LoginName:
+          <input type="text" ref={nameRef} />
+        </div>
+        <button type="reset">Cancel</button>
+        <button onClick={() => setX((x) => x + 1)} type="reset">
+          plus count
+        </button>
+        <button type="submit">Login</button>
+      </form>
+    </>
   );
 }

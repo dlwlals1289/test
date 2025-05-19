@@ -2,6 +2,7 @@ import { useImperativeHandle, type ForwardedRef, type PropsWithChildren, type Re
 import { useCounter } from '../contexts/counter/useCounter';
 import { useFetch } from '../hooks/useFetch';
 import { useToggle } from '../hooks/useToggle';
+import LabelInput from './LabelInput';
 
 export type HelloHandler = {
   xx: string;
@@ -51,6 +52,8 @@ export default function Hello({ id, helloButtonRef, children, refx }: PropsWithC
         count - 1
       </button>
       <button onClick={toggle}>Reload</button>
+      <LabelInput label="email" />
+      <LabelInput label="name" />
     </div>
   );
 }

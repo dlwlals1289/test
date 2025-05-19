@@ -1,26 +1,43 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export const useTimeout = <T extends (...args: Parameters<T>) => ReturnType<T>>(
   cb: T,
   delay: number,
+  depArr: unknown[] = [],
   ...args: Parameters<T>
 ) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  const clear = () => clearTimeout(timerRef.current);
-  const reset = () => {
-    clear();
+  const setTheTimer = useCallback(() => {
     timerRef.current = setTimeout(() => cb(...args), delay);
-  };
+  }, depArr);
+  const clear = useCallback(() => clearTimeout(timerRef.current), depArr);
+  const reset = useCallback(() => {
+    clear();
+    setTheTimer();
+  }, depArr);
 
   useEffect(() => {
-    timerRef.current = setTimeout(() => cb(...args), delay);
+    setTheTimer();
 
-    return () => clearTimeout(timerRef.current);
-  }, [delay, ...args]);
+    return clear;
+  }, [cb, delay, ...args]);
+  // const setTheTimer = () => (timerRef.current = setTimeout(() => cb(...args), delay));
+  // const clear = () => clearTimeout(timerRef.current);
+  // const reset = () => {
+  //   clear();
+  //   // timerRef.current = setTimeout(() => cb(...args), delay);
+  //   setTheTimer();
+  // };
+
+  // useEffect(() => {
+  //   timerRef.current = setTimeout(() => cb(...args), delay);
+
+  //   return () => clearTimeout(timerRef.current);
+  //   // }, [delay, ...args]);
   // }, [cb, delay, ...args]); // ToDo append cb
 
-  return { reset, clear };
+  return { reset, clear, ref: timerRef };
 };
 
 export const useInterval = <T extends (...args: Parameters<T>) => ReturnType<T>>(
