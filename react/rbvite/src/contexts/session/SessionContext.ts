@@ -21,9 +21,9 @@ export type SessionContextType = {
   session: Session;
   login: (id: number, name: string) => void;
   logout: () => void;
-  removeCartItem: (id: number) => void;
-  addCartItem: (name: string, price: number) => void;
-  editCartItem: (item: Cart) => void;
+  removeItem: (id: number) => void;
+  addItem: (name: string, price: number) => void;
+  editItem: (item: Cart) => void;
   loginHandlerRef: RefObject<LoginHandler | null>; // react19
   // loginHandlerRef : ForwardedRef<LoginHandler> // react18
 };
@@ -31,8 +31,8 @@ export const SessionContext = createContext<SessionContextType>({
   session: { loginUser: null, cart: [] },
   login: () => {},
   logout: () => {},
-  removeCartItem: () => {},
-  addCartItem: () => {},
-  editCartItem: () => {},
+  removeItem: () => {},
+  addItem: () => {},
+  editItem: () => {},
   loginHandlerRef: createRef<LoginHandler>(),
 });

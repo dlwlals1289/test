@@ -5,7 +5,7 @@ import { useCounter } from '../contexts/counter/useCounter';
 // import { useInterval, useTimeout } from '../hooks/useTimer';
 // import { useInterval, useTimeout } from '../hooks/useTimer';
 
-export default function Login({ title }: { title: string }) {
+export default function Login({ title = 'Login' }: { title?: string }) {
   const idRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const { login, loginHandlerRef } = useSession();

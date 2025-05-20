@@ -7,7 +7,7 @@ export default function SearchButton({ inpName = 'searchStr', label = 'Search' }
   const { pending, data } = useFormStatus();
   return (
     <>
-      <button disabled={pending}>{pending ? `searching... ${data?.get(inpName)}` : label}</button>;
+      <button disabled={pending}>{pending ? `searching... ${data?.get(inpName)}` : label}</button>
     </>
   );
 }

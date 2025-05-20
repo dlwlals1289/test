@@ -2,24 +2,40 @@ import { useRef } from 'react';
 import './App.css';
 import Hello, { type HelloHandler } from './components/Hello';
 import My from './components/My';
-import { useCounter } from './contexts/counter/useCounter';
+import Nav from './Nav';
+import { Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import Home from './components/Home';
+import { NotFound } from './NotFound';
+import Items from './components/Items';
+import Item from './components/Item';
+import Posts from './components/Posts';
 import { SessionProvider } from './contexts/session/SessionProvider';
+import ItemLayout from './components/ItemLayout';
+import ItemDetail from './components/ItemDetail';
 
 function App() {
-  const { count } = useCounter();
   const helloButtonRef = useRef<HTMLButtonElement>(null);
+  const logoutButtonRef = useRef<HTMLButtonElement>(null);
   const helloHandlerRef = useRef<HelloHandler>(null);
 
   return (
     <>
-      <h2>count: {count}</h2>
       <SessionProvider>
-        <My />
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/my" element={<My logoutButtonRef={logoutButtonRef} />} />
+          <Route path="/hello" element={<Hello id={1} helloButtonRef={helloButtonRef} refx={helloHandlerRef} />} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/items" element={<ItemLayout />}>
+            <Route index element={<Items />} />
+            <Route path=":id" element={<ItemDetail />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </SessionProvider>
-      <Hello id={count + 1} helloButtonRef={helloButtonRef} refx={helloHandlerRef}>
-        반갑습니다!
-      </Hello>
-      <button onClick={() => helloHandlerRef.current?.sayHello()}>say Hello</button>
     </>
   );
 }

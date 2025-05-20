@@ -1,10 +1,7 @@
-// import type { RefObject } from 'react';
-// import type { LoginUser } from '../App';
-import type { RefObject } from 'react';
+import { useEffect, type RefObject } from 'react';
+
+import Trans from './Trans';
 import { useSession } from '../contexts/session/useSession';
-// import Trans from './Trans';
-import PostList from './PostList';
-import Post from './Post';
 
 type Props = {
   logoutButtonRef: RefObject<HTMLButtonElement | null>;
@@ -15,11 +12,18 @@ export default function Profile({ logoutButtonRef }: Props) {
     session: { loginUser },
     logout,
   } = useSession();
+
+  console.log('ffffffffff');
+  const f = () => console.log('sss>>>', loginUser?.name);
+  const arr = [1, 2, 3];
+  useEffect(() => {
+    f();
+  }, [f, arr]);
+
   return (
     <>
-      {/* <PostList /> */}
-      <Post />
-      {/* <Trans /> */}
+      <h1>My Page</h1>
+      <Trans />
       <h3>LoginUser: {loginUser?.name}</h3>
       <button ref={logoutButtonRef} onClick={logout}>
         LogOut

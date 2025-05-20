@@ -73,12 +73,12 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
     dispatch({ type: 'INITIALIZE', payload: data ?? [] });
   }, [data, session.cart]);
 
-  const addCartItem = useCallback((name: string, price: number) => {
+  const addItem = useCallback((name: string, price: number) => {
     const id = Math.max(...session.cart.map((item) => item.id), 0) + 1;
     dispatch({ type: 'addItem', payload: { id, name, price } });
   }, []);
-  const removeCartItem = (itemId: number) => dispatch({ type: 'removeItem', payload: itemId });
-  const editCartItem = (item: Cart) => dispatch({ type: 'editItem', payload: item });
+  const removeItem = (itemId: number) => dispatch({ type: 'removeItem', payload: itemId });
+  const editItem = (item: Cart) => dispatch({ type: 'editItem', payload: item });
   const login = useCallback((id: number, name: string) => {
     if (!loginHandlerRef.current) return;
     if (loginHandlerRef.current.validate()) dispatch({ type: 'login', payload: { id, name } });
@@ -91,9 +91,9 @@ export const SessionProvider = ({ children }: PropsWithChildren) => {
     session,
     login,
     logout,
-    addCartItem,
-    editCartItem,
-    removeCartItem,
+    addItem,
+    editItem,
+    removeItem,
     loginHandlerRef,
   };
 
