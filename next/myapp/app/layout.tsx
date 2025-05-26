@@ -1,7 +1,10 @@
+import { ThemeProvider } from 'next-themes';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { ReactNode } from 'react';
 import './globals.css';
+import { ModeToggle } from '@/components/ui/mode-toggld';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -21,25 +24,33 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased m-5`}
       >
-        <h1 className='flex gap-3'>
-          Root
-          <Link href='/hello'>Hello</Link>
-          <Link href='/hi'>Hi</Link>
-          <Link href='/hi/night'>Hi Night</Link>
-          <Link href='/parallel'>Parallel</Link>
-          <Link href='/intercept'>Intercept</Link>
-          <Link href='/photos'>Photos</Link>
-        </h1>
-        <div>{children}</div>
-        <hr />
-        <h2>Footer</h2>
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <h1 className='flex gap-3'>
+            Root
+            <Link href='/hello'>Hello</Link>
+            <Link href='/hi'>Hi</Link>
+            <Link href='/hi/night'>Hi Night</Link>
+            <Link href='/parallel'>Parallel</Link>
+            <Link href='/intercept'>Intercept</Link>
+            <Link href='/photos'>Photos</Link>
+            <ModeToggle />
+          </h1>
+          <div>{children}</div>
+          <hr />
+          <h2>Footer</h2>
+        </ThemeProvider>
       </body>
     </html>
   );
